@@ -96,6 +96,11 @@ class FrozenCLIPEmbedder(AbstractEncoder):
                  freeze=True, layer="last", layer_idx=None):  # clip-vit-base-patch32
         super().__init__()
         assert layer in self.LAYERS
+        # Use local path if version is the default model
+        import os
+        local_path = "/mnt/nvme1/shihuiz/huggingface/hub/models--openai--clip-vit-large-patch14"
+        if version == "openai/clip-vit-large-patch14" and os.path.exists(local_path):
+            version = local_path
         self.tokenizer = CLIPTokenizer.from_pretrained(version)
         self.transformer = CLIPTextModel.from_pretrained(version)
         self.device = device
